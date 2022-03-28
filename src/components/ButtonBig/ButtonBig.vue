@@ -4,8 +4,8 @@
 
 <script>
 export default {
-  name: "ButtonBig",
-}
+  name: 'ButtonBig',
+};
 </script>
 
 <style scoped>
