@@ -1,5 +1,4 @@
-import Button from './components/Button/Button.vue';
-import ButtonBig from './components/ButtonBig/ButtonBig.vue';
+import components from './components/index';
 import store from './store';
 
 const ComponentLibrary = {
@@ -11,8 +10,10 @@ const ComponentLibrary = {
     options.store.registerModule('vueComponentLibraryStore', store);
 
     // Components
-    Vue.component('Button', Button);
-    Vue.component('ButtonBig', ButtonBig);
+    Object.keys(components).forEach((key) => {
+      const component = components[key];
+      Vue.component(component.name, component);
+    });
   },
 };
 
