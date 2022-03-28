@@ -1,4 +1,4 @@
-import Button from './Button/Button.vue';
-import ButtonBig from './ButtonBig/ButtonBig.vue';
+import Button from './button/Button.vue';
+import InputText from './inputText/InputText.vue';
 
-export default { Button, ButtonBig };
+export default { Button, InputText };
