@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "vue-cli-service build --target lib --name vue-component-library src/main.js",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "build-storybook": "build-storybook",
-    "storybook": "start-storybook -p 6006"
+    "serve:storybook": "start-storybook -p 6006",
+    "build:storybook": "build-storybook",
+    "build:lib": "vue-cli-service build --target lib --name vue-component-library src/main.js"
   },
   "main": "dist/vue-component-library.umd.min.js",
   "dependencies": {},
