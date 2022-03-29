@@ -23,8 +23,8 @@ export default {
     },
     label: {
       type: String,
-      default: 'Button Ui'
-    }
+      default: 'Button Ui',
+    },
   },
   computed: {
     times() {

@@ -16,11 +16,11 @@ export default {
   props: {
     placeholder: {
       type: String,
-      default: 'Input Placeholder'
+      default: 'Input Placeholder',
     },
     label: {
       type: String,
-      default: 'Input Label'
+      default: 'Input Label',
     },
     size: {
       type: String,
@@ -58,6 +58,10 @@ export default {
   font-size: 11px;
   font-weight: bold;
   text-transform: uppercase;
+  text-align: left;
+  display: block;
+  line-height: 1;
+  margin-bottom: 3px;
 }
 
 .InputText__form {
