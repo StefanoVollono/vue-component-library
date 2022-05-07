@@ -1,14 +1,5 @@
-# Vuejs Components library
-Questa repository prende ispirazione dalla lettura dei seguenti articoli. (in particolare l'ultimo)
-1. https://itnext.io/create-a-vue-js-component-library-as-a-module-part-1-a1116e632751 (part 1)
-2. https://itnext.io/create-a-vue-js-component-library-part-2-c92a42af84e9 (part 2)
-3. https://www.xiegerts.com/post/creating-vue-component-library-introduction/ (series of articles)
-4. https://blog.logrocket.com/building-vue-3-component-library/ (vue3)
-5. https://blog.harveydelaney.com/creating-your-own-vue-component-library/
-6. https://javascript.plainenglish.io/how-to-create-test-bundle-vue-components-library-8c4828ab7b00
-
 ## Una libreria di componenti che problema risolve?
-Questa repository contiene una libreria fatta in vuejs di componenti UI (ce ne sono 2 di esempio al suo interno) esportata come plugin. Questo approccio, risolve il problema di avere tutto in un'unica repository (monolite). Splittare parti di codice in piu repository, pubblicarle come pacchetto NPM e includerle come dipendenze, rende la repository principale più snella. Inoltre gli stessi componenti possono essere utilizzati su più repo differenti evitando così duplicazione di codice.
+Questa repository contiene una libreria fatta in vuejs 2.x di componenti UI (ce ne sono 2 di esempio al suo interno) esportata come plugin. Questo approccio, risolve il problema di avere tutto in un'unica repository (monolite). Splittare parti di codice in più repository, pubblicarle come pacchetto NPM e includerle come dipendenze versionate, rende la repository principale più snella. Inoltre gli stessi componenti possono essere utilizzati su più repo differenti evitando così duplicazione di codice.
 
 ## Obiettivo finale
 L'obiettivo finale come abbiamo detto, sará quello di avere una libreria di componenti UI esportata come plugin. Ogni componente avrà una sua folder dedicata, che conterrà il componente stesso, il test unitario e un file di stories.
@@ -18,15 +9,6 @@ L'obiettivo finale come abbiamo detto, sará quello di avere una libreria di com
 * Store di vuex dedicato alla libreria salvato sotto un namespace dedicato.
 * [Storybook di componenti](https://storybook.js.org/docs/vue/get-started/install), strumento utilissimo se devi sviluppare e documentare in modo semplice e veloce (tramite le stories) componenti in un contesto isolato.
 * Suite di test in jest.
-
-## Organizzazione delle Folder
-Il progetto è stato creato con la classica vue-cli ma non abbiamo i classici file che troviamo di default. 
-* Sotto la cartella components abbiamo i singoli componenti con 3 file all'interno:
-  * il file del componente Component.vue
-  * Il file relativo allo storybook Component.stories.js
-  * Il file relativo al Test Component.spec.js
-  * Nella Root di component è presente un index in cui vengono esportati tutti i componenti. 
-* Nella root abbiamo il file main.js (auto generato della cli) in cui vengono ciclati tutti i componenti prensi dall'export della index e viene esportato tutto come plugin. (compreso lo store)
 
 ## Get Started
 Partiamo con il creare una normalissima app in Vue tramite la CLI. Nel momento in cui sto scrivendo questo articolo la versione di Vue utilizzata è la 2.6 mentre quella della vue CLI è la 4.5.15. Partiamo con il wizard selezionando a mano le feature che ci interessano.
@@ -42,7 +24,7 @@ Partiamo con il creare una normalissima app in Vue tramite la CLI. Nel momento i
 * ◯ E2E Testing
 
 ## File System refactoring
-Adesso che abbiamo una classica App in vue possiamo procedere con customizzare la struttura di file e cartelle per ottenere quella che sarà alla fine la nostra libreria. Cominciamo con il cancellare La cartella public e la cartella test dalla root. All'interno della cartella src cancellare anche assets, App.vue e il componente HelloWorld.vue di default. La cartella components (ormai vuota), verrà popolata dai nostri componenti organizzati in utleriori sottocartelle. Nella Root di components aggiungeremo una index.js in cui vengono esportati tutti i singoli componenti:
+Adesso che abbiamo una classica App in vue possiamo procedere con customizzare la struttura di file e cartelle per ottenere quella che sarà alla fine la nostra libreria. Cominciamo con il cancellare la cartella public e la cartella test dalla root. All'interno della cartella src cancellare anche assets, App.vue e il componente HelloWorld.vue di default. La cartella components (ormai vuota), verrà popolata dai nostri componenti organizzati in utleriori sottocartelle. Nella Root di components aggiungeremo una index.js in cui vengono esportati tutti i singoli componenti:
 
 ```
 import Button from './button/Button.vue';
@@ -56,13 +38,33 @@ Ogni componente, a sua volta, avrà 3 file principali:
 * Il file relativo allo storybook Component.stories.js (Lo installeremo tra poco)
 * Il file relativo al Test Component.spec.js
 
-Infine nella root di src, abbiamo lasciato il nostro file main.js che andrà modificato per per far si che vengano ciclati tutti i componenti presi dall'export della index e venga esportato il tutto come plugin. (compreso lo store).
+Infine nella root di src, abbiamo lasciato il nostro file main.js che andrà modificato per per far si che nella funzione di install, vengano ciclati tutti i componenti presi dall'export della index e venga esportato il tutto (compreso lo store) come plugin registrando globalmente ogni componente sull'istanza di Vue.
+
+```
+import components from './components/index';
+import store from './store';
+
+const ComponentLibrary = {
+  install(Vue = {}, options) {
+    // Store Vuex registrato sotto il namespace 'vueComponentLibraryStore' e passato come option al momento del suo utilizzo come plugin
+    options.store.registerModule('vueComponentLibraryStore', store);
+
+    // Ciclo i componenti esportati da components/index e li registro globalmente sull'istanza di Vue.
+    Object.keys(components).forEach((key) => {
+      const component = components[key];
+      Vue.component(component.name, component);
+    });
+  },
+};
+
+export default ComponentLibrary;
+```
+
+## Storybook
 
 
 
-
-
-## Comandi principali nel package.json
+## File package.json
 * `test:unit` -> Lancia la suite test in jest (ogni componente ha il suo test) 
 * `lint` -> Lancia un check del codice in base al tipo di preset scelto durante la creazione del progetto
 * `serve:storybook` -> Lancia il serve locale dello storybook
@@ -74,3 +76,12 @@ Per prima cosa bisogna avviare il processo di build direttamente dalla libreria 
 
 ## Inclusione della libreria
 Per utilizzare la libreria come plugin (e quindi disponibile globalmente in tutta l'app), basterà scrivere nel main.js `Vue.use(VueComponentLibrary, { store });`, e includere l'eventuale stile prodotto dal processo di dist `import 'vue-component-library/dist/vue-component-library.css';`
+
+# Bibliografia
+Questa repository prende ispirazione dalla lettura dei seguenti articoli. (in particolare l'ultimo)
+1. https://itnext.io/create-a-vue-js-component-library-as-a-module-part-1-a1116e632751 (part 1)
+2. https://itnext.io/create-a-vue-js-component-library-part-2-c92a42af84e9 (part 2)
+3. https://www.xiegerts.com/post/creating-vue-component-library-introduction/ (series of articles)
+4. https://blog.logrocket.com/building-vue-3-component-library/ (vue3)
+5. https://blog.harveydelaney.com/creating-your-own-vue-component-library/
+6. https://javascript.plainenglish.io/how-to-create-test-bundle-vue-components-library-8c4828ab7b00
