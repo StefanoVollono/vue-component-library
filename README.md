@@ -7,7 +7,7 @@ L'obiettivo finale come abbiamo detto, sará quello di avere una libreria di com
 ## Cosa contiene nel dettaglio
 * 2 componenti UI di esempio. (Button - InputText)
 * Store di vuex dedicato alla libreria salvato sotto un namespace dedicato.
-* [Storybook di componenti](https://storybook.js.org/docs/vue/get-started/install), strumento utilissimo se devi sviluppare e documentare in modo semplice e veloce (tramite le stories) componenti in un contesto isolato.
+* [Storybook di componenti](https://storybook.js.org/docs/vue/get-started/install).
 * Suite di test in jest.
 
 ## Get Started
@@ -61,7 +61,7 @@ export default ComponentLibrary;
 ```
 
 ## Storybook
-
+Lo Storybook è uno strumento utilissimo se devi sviluppare e documentare in modo semplice e veloce (tramite le stories) componenti in un contesto isolato. Una singola storia quindi acquisisce lo stato di rendering di un componente dell'interfaccia utente. Si possono scrivere più storie per componente che descrivono tutti gli stati che un componente può supportare.
 
 
 ## File package.json
