@@ -7,7 +7,7 @@ L'obiettivo finale come abbiamo detto, sará quello di avere una libreria di com
 ## Cosa contiene nel dettaglio
 * 2 componenti UI di esempio. (Button - InputText)
 * Store di vuex dedicato alla libreria salvato sotto un namespace dedicato.
-* [Storybook di componenti](https://storybook.js.org/docs/vue/get-started/install).
+* Storybook di componenti.
 * Suite di test in jest.
 
 ## Get Started
@@ -24,7 +24,7 @@ Partiamo con il creare una normalissima app in Vue tramite la CLI. Nel momento i
 * ◯ E2E Testing
 
 ## File System refactoring
-Adesso che abbiamo una classica App in vue possiamo procedere con customizzare la struttura di file e cartelle per ottenere quella che sarà alla fine la nostra libreria. Cominciamo con il cancellare la cartella public e la cartella test dalla root. All'interno della cartella src cancellare anche assets, App.vue e il componente HelloWorld.vue di default. La cartella components (ormai vuota), verrà popolata dai nostri componenti organizzati in utleriori sottocartelle. Nella Root di components aggiungeremo una index.js in cui vengono esportati tutti i singoli componenti:
+Adesso che abbiamo una classica App in vue possiamo procedere con modificare la struttura di file e cartelle per ottenere quella che sarà alla fine la nostra libreria. Cominciamo con il cancellare la cartella public e la cartella tests dalla root. All'interno della cartella src cancellare anche assets, App.vue e il componente HelloWorld.vue di default. La cartella components (ormai vuota), verrà popolata dai nostri componenti organizzati in utleriori sottocartelle. Nella Root di components aggiungeremo una index.js in cui vengono esportati tutti i singoli componenti:
 
 ```
 import Button from './button/Button.vue';
@@ -61,8 +61,29 @@ export default ComponentLibrary;
 ```
 
 ## Storybook
-Lo Storybook è uno strumento utilissimo se devi sviluppare e documentare in modo semplice e veloce (tramite le stories) componenti in un contesto isolato. Una singola storia quindi acquisisce lo stato di rendering di un componente dell'interfaccia utente. Si possono scrivere più storie per componente che descrivono tutti gli stati che un componente può supportare.
+Adesso che siamo pronti con la struttura base della nostra library, possiamo installare lo Storybook, strumento utilissimo se devi sviluppare e documentare in modo semplice e veloce (tramite le stories) componenti in un contesto isolato. Una singola storia quindi acquisisce lo stato di rendering di un componente dell'interfaccia utente. Si possono scrivere più storie per componente e ogni storia descrive tutti gli stati che un componente può supportare. Per installare lo storybook su un'app in vue già esistente, basta seguire le istruzioni indicate sulla [documentazione ufficiale](https://storybook.js.org/docs/vue/get-started/install).
 
+```
+# Add Storybook:
+npx sb init
+```
+Il comando installerà in pochi secondi tutto il necessario per runnare in locale lo storybook, creando nella root di src una cartella chiamata stories, con alcuni esempi all'interno. Non ci serve e puoi tranquillamente cancellarla. Nella root del progetto abbiamo anche una cartella .storybook con all'interno un file main.js. che andrà modificato affichè vada a pescare tutti i file di stories all'interno di components.
+
+```
+module.exports = {
+  "stories": [
+    "../src/components/**/*.stories.mdx",
+    "../src/components/**/*.stories.@(js|jsx|ts|tsx)"
+  ],
+  "addons": [
+    "@storybook/addon-links",
+    "@storybook/addon-essentials"
+  ],
+  "framework": "@storybook/vue"
+}
+```
+
+Siamo pronti per creare il nostro primo componente. Un bottone.
 
 ## File package.json
 * `test:unit` -> Lancia la suite test in jest (ogni componente ha il suo test) 
