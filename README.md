@@ -119,6 +119,8 @@ describe('Button.vue', () => {
 });
 ```
 
+L'ultimo file da creare è proprio il file dello storybook. 
+
 ## File package.json
 * `test:unit` -> Lancia la suite test in jest (ogni componente ha il suo test) 
 * `lint` -> Lancia un check del codice in base al tipo di preset scelto durante la creazione del progetto
