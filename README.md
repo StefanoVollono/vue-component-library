@@ -83,7 +83,41 @@ module.exports = {
 }
 ```
 
-Siamo pronti per creare il nostro primo componente. Un bottone.
+Siamo pronti per creare il nostro primo componente. Un bottone. Voglio ricordarti che tutto quello che stiamo vedendo è ovviamente molto semplificato e anche il componente stesso di UI è ridotto al minimo per dare piu spazio ai concetti generali di libreria di componenti.
+
+## Button component
+Come abbiamo già detto più volte ogni componente sarà composto da 3 file. Partiamo con il file del componente vue. É un semplicissimo bottone con 2 prop (size e label) e al click viene emittato un evento 'btnLibClicked'. Anche lo stile è molto basico. Contiene giusto le regole base e alcuni modificatori per cambiare il size del bottone stesso. Il codice completo del bottone lo trovate nella repository che ho creato per questo articolo. Ti ricordo che puoi trovarla [qui](https://github.com/StefanoVollono/vue-component-library).
+
+```
+<button
+    @click="onClickBtn"
+    class="Button"
+    :class="classes"
+  >
+    {{ text }}
+  </button>
+```
+
+Il secondo file è il test. Se non hai conoscenze di Unit testing e Vue ti consiglio di andare ad approfondire le basi [qui](https://v2.vuejs.org/v2/guide/testing.html). Ci sarebbero moltissime cose da dire anche qui. Cerchiamo di analizzarlo a grandi linee. Prima di tutto importiamo il nostro componente Button creiamo il nostro wrapper che contiene il componente Vue montato e renderizzato.
+
+```
+import { mount } from '@vue/test-utils';
+import Button from '@/components/button/Button.vue';
+
+describe('Button.vue', () => {
+
+  const wrapper = mount(Button, {
+    propsData: {
+      label: 'Lorem ipsum'
+    }
+  });
+
+  it('renders props.label when passed', () => {
+    expect(wrapper.props().label).toBe('Lorem ipsum');
+  });
+
+});
+```
 
 ## File package.json
 * `test:unit` -> Lancia la suite test in jest (ogni componente ha il suo test) 
