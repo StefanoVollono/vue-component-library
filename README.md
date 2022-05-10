@@ -98,7 +98,7 @@ Come abbiamo già detto più volte ogni componente sarà composto da 3 file. Par
   </button>
 ```
 
-Il secondo file è il test. Se non hai conoscenze di Unit testing e Vue ti consiglio di andare ad approfondire le basi [qui](https://v2.vuejs.org/v2/guide/testing.html). Ci sarebbero moltissime cose da dire anche qui. Cerchiamo di analizzarlo a grandi linee. Prima di tutto importiamo il nostro componente Button creiamo il nostro wrapper che contiene il componente Vue montato e renderizzato.
+Il secondo file è il test. Se non hai conoscenze di Unit testing e Vue ti consiglio di andare ad approfondire le basi [qui](https://v2.vuejs.org/v2/guide/testing.html). Ci sarebbero moltissime cose da dire anche qui. Cerchiamo di analizzarlo a grandi linee. Prima di tutto importiamo il nostro componente Button creiamo il nostro wrapper che contiene il [componente Vue montato e renderizzato](https://v1.test-utils.vuejs.org/api/#mount). Il nostro wrapper può essere creato con o senza options. In questo particolare caso, abbiamo utilizzato [propsdata](https://v1.test-utils.vuejs.org/api/options.html#propsdata) per settare una prop (label) quando il componente è montato. Il nostro expect infine prevede che sull'istanza del componente appena montato il valore della prop label sia proprio 'Lorem ipsum'. Il nostro test è terminato. Ripeto, abbiamo scalfito solo la superficie.
 
 ```
 import { mount } from '@vue/test-utils';
