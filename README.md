@@ -122,14 +122,30 @@ describe('Button.vue', () => {
 L'ultimo file da creare è proprio il file dello storybook. 
 
 ## File package.json
+Anche questo file deve essere leggermente modificato affichè tutto funzioni correttamente. Di seguito ecco una lista di comandi importanti da tenere sempre sotto mano.
+
 * `test:unit` -> Lancia la suite test in jest (ogni componente ha il suo test) 
 * `lint` -> Lancia un check del codice in base al tipo di preset scelto durante la creazione del progetto
 * `serve:storybook` -> Lancia il serve locale dello storybook
 * `build:storybook` -> Crea una build dello storybook
 * `build:lib` -> Crea una build della libreria esportandola in formato UMD e common.js
 
-## Come utilizzare in locale la libreria
-Per prima cosa bisogna avviare il processo di build direttamente dalla libreria stessa, processo che deve essere leggermente modificato in quanto bisogna aggiungere il flag `--target lib` per poter avere un pacchetto di file idoneo da essere incluso in un secondo momento. Ecco nel package json il comando completo `"build:lib": "vue-cli-service build --target lib --name vue-component-library src/main.js"`. Se non si vuole esportare su NPM la libreria (soprattutto in una prima fase di test della librteria stessa in cui si fanno molte modifiche strutturali), si puo usare yarn nella repo che la ospiterà digitando `yarn add ../vue-component-library` (il percorso ovviamente dipende dalla posizione delle due repository). Questo comando aggiungerà la libreria tra le dipendenze del packgage json e creerà un symlink per poterla utilizzare. 
+In particolare il comando di build, comando che deve essere leggermente modificato in quanto bisogna aggiungere il flag `--target lib` per poter avere un pacchetto di file idoneo da essere incluso in un secondo momento. Ecco il comando completo: 
+
+```"build:lib": "vue-cli-service build --target lib --name vue-component-library src/main.js"```
+
+Altra nota importante. Le dependencies sono state svuotate. la dipendenza di vue è stata definita come [peer dependencies](https://docs.npmjs.com/cli/v8/configuring-npm/package-json#peerdependencies), cosi durante il processo di build non viene incluso anche tutto il pacchetto di vue, ma sarà responsablita della repository che ospita la libraria ad avere tale dipendenza.
+
+```
+"peerDependencies": {
+    "vue": "^2.6.11"
+  },
+```
+
+## Come utilizzare in locale la libreria (senza doverla pubblicare su NPM)
+Per prima cosa bisogna avviare il processo di build direttamente dalla libreria stessa. Se non si vuole esportare su NPM la libreria (soprattutto in una prima fase di test della librteria stessa in cui si fanno molte modifiche strutturali), si puo usare ad esempio yarn nella repository che la ospiterà digitando `yarn add ../vue-component-library` (il percorso ovviamente dipende dalla posizione delle due repository). [Questo comando](https://classic.yarnpkg.com/en/docs/cli/add) aggiungerà la libreria (locale) tra le dipendenze del packgage.json.
+
+
 
 ## Inclusione della libreria
 Per utilizzare la libreria come plugin (e quindi disponibile globalmente in tutta l'app), basterà scrivere nel main.js `Vue.use(VueComponentLibrary, { store });`, e includere l'eventuale stile prodotto dal processo di dist `import 'vue-component-library/dist/vue-component-library.css';`
