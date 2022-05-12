@@ -1,7 +1,7 @@
 import MyInputText from './InputText.vue';
 
 export default {
-  title: 'Example/Input type text',
+  title: 'Vue UI Library/Input text',
   component: MyInputText,
   argTypes: {
     size: {
