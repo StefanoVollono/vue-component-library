@@ -2,7 +2,7 @@
 Questa repository contiene una libreria fatta in vuejs 2.x di componenti UI (ce ne sono 2 di esempio al suo interno) esportata come plugin. Questo approccio, risolve il problema di avere tutto in un'unica repository (monolite). Splittare parti di codice in più repository, pubblicarle come pacchetto NPM e includerle come dipendenze versionate, rende la repository principale più snella. Inoltre gli stessi componenti possono essere utilizzati su più repo differenti evitando così duplicazione di codice.
 
 ## Obiettivo finale
-L'obiettivo finale come abbiamo detto, sará quello di avere una libreria di componenti UI esportata come plugin. Ogni componente avrà una sua folder dedicata, che conterrà il componente stesso, il test unitario e un file di stories.
+L'obiettivo finale come abbiamo detto, sará quello di avere una libreria di componenti UI esportata come plugin. Ogni componente avrà una sua folder dedicata, che conterrà il componente stesso, il test unitario e un file di stories. Tutto quello che ti spiegherò da qui in avanti e i relativi frammenti di codice fanno riferimento a [questa repository](https://github.com/StefanoVollono/vue-component-library) di github che ho creato appositamente per l'articolo.
 
 ## Cosa contiene nel dettaglio
 * 2 componenti UI di esempio. (Button - InputText)
@@ -23,7 +23,7 @@ Partiamo con il creare una normalissima app in Vue tramite la CLI. Nel momento i
 * ◉ Unit Testing -> JEST
 * ◯ E2E Testing
 
-## File System refactoring
+## Modifichiamo la struttura di file e cartelle
 Adesso che abbiamo una classica App in vue possiamo procedere con modificare la struttura di file e cartelle per ottenere quella che sarà alla fine la nostra libreria. Cominciamo con il cancellare la cartella public e la cartella tests dalla root. All'interno della cartella src cancellare anche assets, App.vue e il componente HelloWorld.vue di default. La cartella components (ormai vuota), verrà popolata dai nostri componenti organizzati in utleriori sottocartelle. Nella Root di components aggiungeremo una index.js in cui vengono esportati tutti i singoli componenti:
 
 ```
@@ -46,7 +46,7 @@ import store from './store';
 
 const ComponentLibrary = {
   install(Vue = {}, options) {
-    // Store Vuex registrato sotto il namespace 'vueComponentLibraryStore' e passato come option al momento del suo utilizzo come plugin
+    // Lo store Vuex, registrato sotto il namespace 'vueComponentLibraryStore', viene passato come option al momento del suo utilizzo come plugin
     options.store.registerModule('vueComponentLibraryStore', store);
 
     // Ciclo i componenti esportati da components/index e li registro globalmente sull'istanza di Vue.
@@ -61,13 +61,14 @@ export default ComponentLibrary;
 ```
 
 ## Storybook
-Adesso che siamo pronti con la struttura base della nostra library, possiamo installare lo Storybook, strumento utilissimo se devi sviluppare e documentare in modo semplice e veloce (tramite le stories) componenti in un contesto isolato. Una singola storia quindi acquisisce lo stato di rendering di un componente dell'interfaccia utente. Si possono scrivere più storie per componente e ogni storia descrive tutti gli stati che un componente può supportare. Per installare lo storybook su un'app in vue già esistente, basta seguire le istruzioni indicate sulla [documentazione ufficiale](https://storybook.js.org/docs/vue/get-started/install).
+Adesso che siamo pronti con la struttura base della nostra library, possiamo installare lo Storybook, strumento utilissimo se devi sviluppare e documentare in modo semplice e veloce (tramite le stories) componenti in un contesto isolato. Una singola storia quindi acquisisce lo stato di rendering del componente a cui quella storia fa riferimento. Si possono scrivere più storie per componente e ogni storia descrive tutti gli stati che un componente può supportare. Per installare lo storybook su un'app in vue già esistente, basta seguire le istruzioni indicate sulla [documentazione ufficiale](https://storybook.js.org/docs/vue/get-started/install).
 
 ```
 # Add Storybook:
 npx sb init
 ```
-Il comando installerà in pochi secondi tutto il necessario per runnare in locale lo storybook, creando nella root di src una cartella chiamata stories, con alcuni esempi all'interno. Non ci serve e puoi tranquillamente cancellarla. Nella root del progetto abbiamo anche una cartella .storybook con all'interno un file main.js. che andrà modificato affichè vada a pescare tutti i file di stories all'interno di components.
+
+Il comando installerà in pochi secondi tutto il necessario per startare in locale lo storybook, creando nella root di src una cartella chiamata stories, con alcuni esempi all'interno. Non ci serve e puoi tranquillamente cancellarla. Nella root del progetto abbiamo anche una cartella .storybook con all'interno un file main.js. che andrà modificato affinchè vada a pescare tutti i file di stories all'interno di components.
 
 ```
 module.exports = {
@@ -86,7 +87,10 @@ module.exports = {
 Siamo pronti per creare il nostro primo componente. Un bottone. Voglio ricordarti che tutto quello che stiamo vedendo è ovviamente molto semplificato e anche il componente stesso di UI è ridotto al minimo per dare piu spazio ai concetti generali di libreria di componenti.
 
 ## Button component
-Come abbiamo già detto più volte ogni componente sarà composto da 3 file. Partiamo con il file del componente vue. É un semplicissimo bottone con 2 prop (size e label) e al click viene emittato un evento 'btnLibClicked'. Anche lo stile è molto basico. Contiene giusto le regole base e alcuni modificatori per cambiare il size del bottone stesso. Il codice completo del bottone lo trovate nella repository che ho creato per questo articolo. Ti ricordo che puoi trovarla [qui](https://github.com/StefanoVollono/vue-component-library).
+Come abbiamo già detto più volte ogni componente sarà composto da 3 file. 
+
+### Button.vue
+Partiamo con il file del componente vue. É un semplicissimo bottone con 2 prop (size e label) e al click viene emittato un evento 'btnLibClicked'. Anche lo stile è molto basico. Contiene giusto le regole base e alcuni modificatori per cambiare il size del bottone stesso. Il codice completo del bottone lo trovate nella repository che ho creato per questo articolo. Ti ricordo che puoi trovarla [qui](https://github.com/StefanoVollono/vue-component-library).
 
 ```
 <button @click="onClickBtn" class="Button" :class="classes">
@@ -94,6 +98,7 @@ Come abbiamo già detto più volte ogni componente sarà composto da 3 file. Par
 </button>
 ```
 
+### Button.spec.js
 Il secondo file è il test. Se non hai conoscenze di Unit testing e Vue ti consiglio di andare ad approfondire le basi [qui](https://v2.vuejs.org/v2/guide/testing.html). Ci sarebbero moltissime cose da dire anche qui. Cerchiamo di analizzarlo a grandi linee. Prima di tutto importiamo il nostro componente Button e creiamo il nostro wrapper che contiene il [componente Vue montato e renderizzato](https://v1.test-utils.vuejs.org/api/#mount). Il nostro wrapper può essere creato con o senza options. In questo particolare caso, abbiamo utilizzato [propsdata](https://v1.test-utils.vuejs.org/api/options.html#propsdata) per settare una prop (label) quando il componente è montato. Il nostro expect infine prevede che sull'istanza del componente appena montato il valore della prop label sia proprio 'Lorem ipsum'. Il nostro test è terminato. Ripeto, abbiamo scalfito solo la superficie. 
 
 ```
@@ -124,7 +129,29 @@ module.exports = {
 };
 ```
 
-L'ultimo file da creare è proprio il file dello storybook. 
+### Button.stories.js
+L'ultimo file da creare è proprio il file dello storybook. Prima ti ho spiegato come installarlo, adesso siamo pronti per creare la nostra prima storia, che come ti dicevo rappresenta un particolare stato del componente stesso. Possiamo creare una storia nel modo più semplice possibile e cioè replicando staticamente tutte le varianti e prop ma non è sicuramente un modo molto efficace per descrivere i nostri elementi di UI. Soprattuto per quelli molto complessi. Ecco un esempio di come potrebbe essere scritto:
+
+```
+import Button from './Button.vue';
+
+export default {
+  title: 'Vue UI Library/Button',
+  component: Button,
+};
+
+export const Small = () => ({
+  components: { Button },
+  template: '<Button size="small" label="Button Label" />',
+});
+
+export const Medium = () => ({
+  components: { Button },
+  template: '<Button size="medium" label="Button Label" />',
+});
+```
+
+Proviamo a fare un passo in avanti, ultilizzando gli storybook Args, che ci consentono di comporre gli argomenti in modo dinamico.
 
 ## File package.json
 Anche questo file deve essere leggermente modificato affichè tutto funzioni correttamente. Di seguito ecco una lista di comandi importanti da tenere sempre sotto mano.
