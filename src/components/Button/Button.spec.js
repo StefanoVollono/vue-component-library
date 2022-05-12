@@ -5,12 +5,12 @@ describe('Button.vue', () => {
 
   const wrapper = mount(Button, {
     propsData: {
-      label: 'lorem'
+      label: 'Lorem ipsum'
     }
   });
 
-  it('renders props.label when passed', () => {
-    expect(wrapper.props().label).toBe('lorem');
+  it('The button text should match the value passed in prop', () => {
+    expect(wrapper.props().label).toBe('Lorem ipsum');
   });
 
 });
