@@ -89,16 +89,12 @@ Siamo pronti per creare il nostro primo componente. Un bottone. Voglio ricordart
 Come abbiamo già detto più volte ogni componente sarà composto da 3 file. Partiamo con il file del componente vue. É un semplicissimo bottone con 2 prop (size e label) e al click viene emittato un evento 'btnLibClicked'. Anche lo stile è molto basico. Contiene giusto le regole base e alcuni modificatori per cambiare il size del bottone stesso. Il codice completo del bottone lo trovate nella repository che ho creato per questo articolo. Ti ricordo che puoi trovarla [qui](https://github.com/StefanoVollono/vue-component-library).
 
 ```
-<button
-    @click="onClickBtn"
-    class="Button"
-    :class="classes"
-  >
-    {{ text }}
-  </button>
+<button @click="onClickBtn" class="Button" :class="classes">
+  {{ text }}
+</button>
 ```
 
-Il secondo file è il test. Se non hai conoscenze di Unit testing e Vue ti consiglio di andare ad approfondire le basi [qui](https://v2.vuejs.org/v2/guide/testing.html). Ci sarebbero moltissime cose da dire anche qui. Cerchiamo di analizzarlo a grandi linee. Prima di tutto importiamo il nostro componente Button creiamo il nostro wrapper che contiene il [componente Vue montato e renderizzato](https://v1.test-utils.vuejs.org/api/#mount). Il nostro wrapper può essere creato con o senza options. In questo particolare caso, abbiamo utilizzato [propsdata](https://v1.test-utils.vuejs.org/api/options.html#propsdata) per settare una prop (label) quando il componente è montato. Il nostro expect infine prevede che sull'istanza del componente appena montato il valore della prop label sia proprio 'Lorem ipsum'. Il nostro test è terminato. Ripeto, abbiamo scalfito solo la superficie.
+Il secondo file è il test. Se non hai conoscenze di Unit testing e Vue ti consiglio di andare ad approfondire le basi [qui](https://v2.vuejs.org/v2/guide/testing.html). Ci sarebbero moltissime cose da dire anche qui. Cerchiamo di analizzarlo a grandi linee. Prima di tutto importiamo il nostro componente Button e creiamo il nostro wrapper che contiene il [componente Vue montato e renderizzato](https://v1.test-utils.vuejs.org/api/#mount). Il nostro wrapper può essere creato con o senza options. In questo particolare caso, abbiamo utilizzato [propsdata](https://v1.test-utils.vuejs.org/api/options.html#propsdata) per settare una prop (label) quando il componente è montato. Il nostro expect infine prevede che sull'istanza del componente appena montato il valore della prop label sia proprio 'Lorem ipsum'. Il nostro test è terminato. Ripeto, abbiamo scalfito solo la superficie. 
 
 ```
 import { mount } from '@vue/test-utils';
@@ -117,6 +113,15 @@ describe('Button.vue', () => {
   });
 
 });
+```
+
+Cosa importante prima di dicontinuare è modificare il file jest.config.js cambiando il path del testMatch cosi che vada a matchare tutti i file di test all'interno della cartella components.
+
+```
+module.exports = {
+  preset: '@vue/cli-plugin-unit-jest',
+  testMatch: ['**/components/**/*.spec.js?(x)'],
+};
 ```
 
 L'ultimo file da creare è proprio il file dello storybook. 
@@ -145,13 +150,39 @@ Altra nota importante. Le dependencies sono state svuotate. la dipendenza di vue
 ## Come utilizzare in locale la libreria (senza doverla pubblicare su NPM)
 Per prima cosa bisogna avviare il processo di build direttamente dalla libreria stessa. Se non si vuole esportare su NPM la libreria (soprattutto in una prima fase di test della librteria stessa in cui si fanno molte modifiche strutturali), si puo usare ad esempio yarn nella repository che la ospiterà digitando `yarn add ../vue-component-library` (il percorso ovviamente dipende dalla posizione delle due repository). [Questo comando](https://classic.yarnpkg.com/en/docs/cli/add) aggiungerà la libreria (locale) tra le dipendenze del packgage.json.
 
-
-
 ## Inclusione della libreria
-Per utilizzare la libreria come plugin (e quindi disponibile globalmente in tutta l'app), basterà scrivere nel main.js `Vue.use(VueComponentLibrary, { store });`, e includere l'eventuale stile prodotto dal processo di dist `import 'vue-component-library/dist/vue-component-library.css';`
+Per utilizzare la libreria come plugin (e quindi disponibile globalmente in tutta l'app), basterà scrivere nel main.js della repo ospitante e includere l'eventuale stile prodotto dal processo di dist:
+
+```
+import Vue from 'vue';
+import VueComponentLibrary from 'vue-component-library';
+import App from './App.vue';
+import store from './store';
+import 'vue-component-library/dist/vue-component-library.css';
+
+Vue.config.productionTip = false;
+
+Vue.use(VueComponentLibrary, { store });
+
+new Vue({
+  store,
+  render: (h) => h(App),
+}).$mount('#app');
+```
+
+Infine per utilizzare la library, basterà includere i componenti e usarli come qualsiasi altro componente scritto in Vue:
+
+```
+<template>
+  <div class="LibraryTest">
+    <InputText label="Prova label" @inputLibChange="onLibraryCatchEvent"/>
+    <Button @btnLibClicked="onLibraryCatchEvent" />
+  </div>
+</template>
+```
 
 # Bibliografia
-Questa repository prende ispirazione dalla lettura dei seguenti articoli. (in particolare l'ultimo)
+Questa repository prende ispirazione dalla lettura dei seguenti articoli.
 1. https://itnext.io/create-a-vue-js-component-library-as-a-module-part-1-a1116e632751 (part 1)
 2. https://itnext.io/create-a-vue-js-component-library-part-2-c92a42af84e9 (part 2)
 3. https://www.xiegerts.com/post/creating-vue-component-library-introduction/ (series of articles)
