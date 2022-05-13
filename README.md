@@ -151,7 +151,7 @@ export const Medium = () => ({
 });
 ```
 
-Proviamo a fare un passo in avanti, ultilizzando gli storybook Args, che ci consentono di comporre gli argomenti in modo dinamico.
+Proviamo a fare un passo in avanti, ultilizzando gli storybook Args, che ci consentono di comporre gli argomenti in modo dinamico per poterne avere poi più controllo tramite gli ArgTypes e modificarne i valori tramite i controlli.
 
 ## File package.json
 Anche questo file deve essere leggermente modificato affichè tutto funzioni correttamente. Di seguito ecco una lista di comandi importanti da tenere sempre sotto mano.
