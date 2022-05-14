@@ -151,7 +151,63 @@ export const Medium = () => ({
 });
 ```
 
-Proviamo a fare un passo in avanti, ultilizzando gli storybook Args, che ci consentono di comporre gli argomenti in modo dinamico per poterne avere poi più controllo tramite gli ArgTypes e modificarne i valori tramite i controlli.
+Proviamo a fare un passo in avanti, ultilizzando gli storybook Args, che ci consentono di comporre gli argomenti in modo dinamico per poterne avere poi più controllo tramite gli ArgTypes e modificarne i valori tramite i controlli. In particolare gli Storybook Controls offrono la possibilità di  interagire dinamicamente con gli args di un componente senza bisogno di modificare il codice. [Avrai a disposizione](https://storybook.js.org/docs/vue/essentials/controls) select, input, switch, radiobox, etc per poter modificare live il tuo componente. Possiamo specificare quali controlli utilizzare, dichiarando un argType personalizzato. Gli ArgType sono una funzionalità di Storybook per specificare il comportamento degli Args. In questo caso per esempio ho deciso di usare una select per modificare il valore della prop size del componente.
+
+```
+export default {
+  title: 'Vue UI Library/Button',
+  component: Button,
+  argTypes: {
+    size: {
+      control: { type: 'select' },
+      options: ['small', 'medium', 'large'],
+    },
+```
+
+ed ecco un esempio di come si possono usare gli args per definire un template e associarlo a tutte le storie di un componente. Ogni storia puo definire alcuni valori di default per costruire uno stato particolare del componente e visualizzarlo cosi nella barra laterale come elemento della lista. Ad esempio qui stiamo definendo una storia che descrive un bottone di tipo Small, il cui testo è Button. 
+
+```
+const Template = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
+  components: { Button },
+});
+
+export const Small = Template.bind({});
+Small.args = {
+  size: 'small',
+  label: 'Button',
+};
+
+export const PrimaryLongName = Template.bind({});
+PrimaryLongName.args = {
+  ...Small.args,
+  label: 'Primary with a really long name',
+};
+```
+
+La cosa comoda è che questi args, sono definiti a livello di storia ma possono facilmente utilizzati cross stories tramite lo spread operator. Quindi se dobbiamo replicare un bottone di tipo small ma con una label differente o proprietà differenti, possiamo farlo nel modo seguente. 
+
+```
+export const SmallLongName = Template.bind({});
+SmallLongName.args = {
+  ...Small.args,
+  label: 'Primary with a really long name',
+};
+```
+
+Infine possiamo avere anche args a livello di componente, questi tipi di argomenti definiti cosi, verranno ereditati da tutte le stories del componente stesso.
+
+```
+export default {
+  title: 'Button',
+  component: Button,
+  args: {
+    size: 'small',
+  },
+};
+```
+
+Ci sono tante altre feature e addons interessanti da poter utilizzare. Per questo ti rimando alla [documentazione ufficiale](https://storybook.js.org/docs/vue/writing-stories/introduction) in cui potrai trovare tutte le informazioni necessarie per scrivere delle storie complete di tutto. 
 
 ## File package.json
 Anche questo file deve essere leggermente modificato affichè tutto funzioni correttamente. Di seguito ecco una lista di comandi importanti da tenere sempre sotto mano.
