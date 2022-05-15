@@ -1,8 +1,9 @@
 <template>
   <button
-    @click="onClickBtn"
     class="Button"
-    :class="classes"
+    :class="sizeClasses"
+    :disabled="disabled"
+    @click="onClickBtn"
   >
     {{ label }}
   </button>
@@ -20,9 +21,13 @@ export default {
       type: String,
       default: 'Button Ui',
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
-    classes() {
+    sizeClasses() {
       return `Button--${this.size}`;
     },
   },
@@ -47,10 +52,15 @@ export default {
     overflow: hidden;
     cursor: pointer;
     color: #fff;
-    background: #2B3044;
+    background: #304495;
   }
 
   .Button--small {padding: 4px 18px; font-size: 9px }
   .Button--medium {padding: 8px 28px; font-size: 14px }
   .Button--large {padding: 12px 32px; font-size: 22px }
+
+  .Button:disabled {
+    opacity: .7;
+    pointer-events: none;
+  }
 </style>
