@@ -93,9 +93,16 @@ Come abbiamo già detto più volte ogni componente sarà composto da 3 file.
 Partiamo con il file del componente vue. É un semplicissimo bottone con 2 prop (size e label) e al click viene emittato un evento 'btnLibClicked'. Anche lo stile è molto basico. Contiene giusto le regole base e alcuni modificatori per cambiare il size del bottone stesso. Il codice completo del bottone lo trovate nella repository che ho creato per questo articolo. Ti ricordo che puoi trovarla [qui](https://github.com/StefanoVollono/vue-component-library).
 
 ```
-<button @click="onClickBtn" class="Button" :class="classes">
-  {{ text }}
-</button>
+<template>
+  <button
+    class="Button"
+    :class="classes"
+    :disabled="disabled"
+    @click="onClickBtn"
+  >
+    {{ label }}
+  </button>
+</template>
 ```
 
 ### Button.spec.js
@@ -170,18 +177,13 @@ ed ecco un esempio di come si possono usare gli args per definire un template e 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { Button },
+  template: '<Button v-bind="$props" />',
 });
 
 export const Small = Template.bind({});
 Small.args = {
   size: 'small',
   label: 'Button',
-};
-
-export const PrimaryLongName = Template.bind({});
-PrimaryLongName.args = {
-  ...Small.args,
-  label: 'Primary with a really long name',
 };
 ```
 
@@ -195,7 +197,7 @@ SmallLongName.args = {
 };
 ```
 
-Infine possiamo avere anche args a livello di componente, questi tipi di argomenti definiti cosi, verranno ereditati da tutte le stories del componente stesso.
+Infine possiamo avere anche args a livello di componente. Questi tipi di argomenti definiti cosi, verranno ereditati da tutte le stories del componente stesso.
 
 ```
 export default {
