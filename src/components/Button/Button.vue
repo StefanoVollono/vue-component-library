@@ -19,6 +19,7 @@ export default {
     },
     theme: {
       type: String,
+      default: 'primary',
     },
     label: {
       type: String,
