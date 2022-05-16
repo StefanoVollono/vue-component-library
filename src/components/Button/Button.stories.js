@@ -13,7 +13,7 @@ export default {
       options: ['primary', 'secondary'],
     },
     disabled: {
-      control: {type: 'boolean' }
+      control: { type: 'boolean' },
     },
   },
 };

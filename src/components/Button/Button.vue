@@ -34,7 +34,7 @@ export default {
       return [
         `Button--${this.size}`,
         `Button--${this.theme}`,
-      ]
+      ];
     },
   },
   methods: {
