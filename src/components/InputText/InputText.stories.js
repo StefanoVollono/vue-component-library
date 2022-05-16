@@ -4,9 +4,8 @@ export default {
   title: 'Vue UI Library/Input text',
   component: MyInputText,
   argTypes: {
-    size: {
-      control: { type: 'select' },
-      options: ['small', 'medium', 'large'],
+    smallSize: {
+      control: { type: 'boolean' },
     },
   },
 };
@@ -17,5 +16,14 @@ const Template = (args, { argTypes }) => ({
   template: '<my-input-text v-bind="$props" />',
 });
 
-export const Primary = Template.bind({});
-Primary.args = { label: 'Input Primary' };
+export const Input = Template.bind({});
+Input.args = {
+  label: 'Input Label',
+  smallSize: false,
+};
+
+export const InputSmall = Template.bind({});
+InputSmall.args = {
+  label: 'Input Small Label',
+  smallSize: true,
+};
