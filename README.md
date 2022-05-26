@@ -11,3 +11,4 @@ L'obiettivo finale come abbiamo detto, sará quello di avere una libreria di com
 * Suite di test in jest.
 
 ## Puoi leggere l'articolo completo a questo link: 
+https://www.bitbull.it/blog/vue-component-library/
